@@ -14,4 +14,14 @@ users.add("ulric", {
     age: 89
 });
 
-console.log(users.get("ulric"), users.get("teman"));
+users.add("git", {
+    user_id: "hm",
+    username: "git",
+    age: 89,
+});
+
+users.list();
+users.remove("ulric");
+users.list();
+users.clearCache();
+users.list();

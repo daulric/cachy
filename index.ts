@@ -40,6 +40,10 @@ class MemoryStore<T> {
             }
         }
     }
+
+    list() {
+        console.log(this.#store);
+    }
 }
 
 export default MemoryStore;
