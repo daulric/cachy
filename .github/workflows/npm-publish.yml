@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
+
       - run: npm version patch  # or major / minor based on your needs
       - run: npm publish
         env:
