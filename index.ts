@@ -1,5 +1,4 @@
 class MemoryStore<T> {
-
     #store: Record<string, T>;
 
     constructor () {
@@ -19,11 +18,19 @@ class MemoryStore<T> {
         return null;
     }
 
-    add(name: string, item: T) {
+    set(name: string, item: T) {
         const in_memory = this.returnData(name);
 
         if (!in_memory) {
             this.#store[name] = item;
+        }
+    }
+
+    update(name: string, state: (state: T) => void) {
+        const in_memory = this.returnData(name);
+
+        if (in_memory) {
+            state(in_memory);
         }
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "@daulric/cachy",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "module": "index.ts",
   "type": "module",
   "private": false,
@@ -9,5 +9,9 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daulric/cachy.git"
   }
 }

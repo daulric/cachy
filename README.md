@@ -1,4 +1,4 @@
-# memorystore
+# Cachy
 
 To install dependencies:
 

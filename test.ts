@@ -8,20 +8,17 @@ type user = {
 
 const users = new MemoryStore<user>();
 
-users.add("ulric", {
+users.set("ulric", {
     user_id: "ur",
     username: "daulric",
     age: 89
 });
 
-users.add("git", {
-    user_id: "hm",
-    username: "git",
-    age: 89,
+users.list();
+
+users.update("ulric", (state) => {
+    state.age += 1;
 });
 
-users.list();
-users.remove("ulric");
-users.list();
-users.clearCache();
+console.log("updated")
 users.list();
