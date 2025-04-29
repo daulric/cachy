@@ -8,37 +8,22 @@ type user = {
 
 const users = new MemoryStore<user>();
 
-users.onChange("ulric", (state) => {
-    console.log("state updated:",state);
+users.onChange("a", (_, state) => {
+    console.log("all data", state);
 })
 
-users.onChange("all", (state) => console.log("all states:", state));
+users.onChange("o", (name, state) => {
+    console.log(name, state);
+})
 
-new Promise((resolve) => {
-    setTimeout(() => {
-        users.set("ulric", {
-            user_id: "ur",
-            username: "daulric",
-            age: 89
-        });
-
-        users.set("git", {
-            user_id: "git",
-            username: "gittab",
-            age: 19,
-        });
-        resolve("success");
-    }, 3000);
-}).then(() => {
-    setTimeout(() => {
-        users.update("ulric", (state) => {
-            state.age += 1;
-        });
-    })
-}).then(() => {
-    setTimeout(() => {
-        users.update("ulric", (state) => {
-            state.age++;
-        });
-    }, 3000)
+users.set("hello", {
+    user_id: "lk",
+    username: "sjsjs",
+    age: 90,
 });
+
+setTimeout(()=> {
+    users.update("hello", (state) => {
+        state.age++;
+    });
+}, 3000);
