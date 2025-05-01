@@ -2,10 +2,6 @@ import { EventEmitter } from "stream";
 
 type EmitType = "a" | "o";
 
-type Callback<T, E extends EmitType> = E extends "o"
-  ? (name: string, state: T) => void
-  : (name: string, state: Record<string, T>) => void;
-
 class MemoryStore<T> {
   #store: Record<string, T>;
   #emitter: EventEmitter;
@@ -32,23 +28,42 @@ class MemoryStore<T> {
 
   get(name: string): T | null {
     const in_memory = this.returnData(name);
-    return in_memory ?? null;
+    const draft_up = typeof(in_memory) === "object" ? {...(in_memory) as T} : in_memory;
+    return draft_up ?? null;
   }
 
-  set(name: string, item: T) {
-    if (!this.returnData(name)) {
+  set(name: string, item: T, force: boolean = false) {
+    if (force || !this.returnData(name)) {
       this.#store[name] = item;
       this.emit_data("o", this.#store[name], name);
       this.emit_data("a", this.#store);
     }
   }
 
-  update(name: string, state: (state: T) => void) {
+  // Modify your update method in MemoryStore
+  update(name: string, updater: (state: T) => T): void {
     const in_memory = this.returnData(name);
-    if (in_memory) {
-      state(in_memory);
-      this.emit_data("o", in_memory, name);
+    
+    if (in_memory === null) {
+      throw new Error(`'set' function must be called first because there's no data for ${name}`);
+    }
+
+    let draft_up: T;
+
+    if (typeof(in_memory) === "object" && in_memory !== null) {
+      draft_up = {...(in_memory as T)};
+    } else {
+      draft_up = in_memory as T;
+    }
+
+    const new_state = updater(draft_up);
+
+    if (new_state !== undefined) {
+      this.#store[name] = new_state;
+      this.emit_data("o", new_state, name);
       this.emit_data("a", this.#store);
+    } else {
+      throw new Error(`no state was returned when updating value for ${name}`);
     }
   }
 
